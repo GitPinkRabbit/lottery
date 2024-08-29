@@ -43,6 +43,11 @@ jobs:
     - name: Get commit id
       run: echo "var=$(git rev-parse --short $env:GITHUB_SHA)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
+    - name: Create a tag
+      uses: rickstaa/action-create-tag@v1
+      with:
+        tag: release/${{ env.release_id }}
+
     - name: Fetch result
       uses: actions/download-artifact@v4
 
@@ -52,3 +57,4 @@ jobs:
         files: ./lottery/lottery.exe
         body: 由 GitHub Actions 自动发布，对应 commit ${{ env.release_id }}。
         name: Release ${{ env.release_id }}
+        tag_name: release/${{ env.release_id }}
