@@ -1,5 +1,5 @@
-# lottery.py. Version 20240830
-version = '20240830'
+# lottery.py. Version 20240830-v4
+version = '20240830-v4'
 
 import sys
 import csv
@@ -90,5 +90,5 @@ with open(filename, encoding=csv_file_encoding, newline='') as csv_file:
 	print(f'\t随机种子为 {{{time_seed}}}，发在梦熊 OJ 用户 QQ 群（650703713）帮助我们记录！', end='\n\n')
 	print('')
 
-	with open(f'MX_lottery_{filename}_{time_seed}.json', 'x', encoding='utf-8') as output_json:
+	with open(f'MX_lottery_ver{version}_{filename}_{time_seed}.json', 'x', encoding='utf-8') as output_json:
 		json.dump({'version': version, 'seed': time_seed, 'prize_lists': prize_lists}, output_json, ensure_ascii=False, indent=4)
