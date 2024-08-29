@@ -1,0 +1,51 @@
+name: PyInstaller and Release
+
+run-name: ${{ github.actor }} is running PyInstaller and Releasing
+
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+
+jobs:
+  pyinstaller:
+    name: PyInstaller
+    runs-on: windows-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Run PyInstaller
+      run: pyinstaller -F lottery.py
+
+    - name: Store result
+      uses: actions/upload-artifact@v4
+      with:
+        name: lottery
+        path: ./dist/lottery.exe
+
+  release:
+    needs: [pyinstaller]
+    runs-on: windows-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Get commit id
+      run: echo "release_id=$(git rev-parse --short $GITHUB_SHA)" >> $GITHUB_ENV
+
+    - name: Fetch result
+      uses: actions/download-artifact@v4
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        files: ./lottery/lottery.exe
+        body: 由 GitHub Actions 自动发布，对应 commit ${{ env.release_id }}。
+        name: Release ${{ env.release_id }}
