@@ -1,4 +1,5 @@
-# lottery.py. Version 20240829
+# lottery.py. Version 20240830
+version = '20240830'
 
 import sys
 import csv
@@ -90,4 +91,4 @@ with open(filename, encoding=csv_file_encoding, newline='') as csv_file:
 	print('')
 
 	with open(f'MX_lottery_{filename}_{time_seed}.json', 'x', encoding='utf-8') as output_json:
-		json.dump({'seed': time_seed, 'prize_lists': prize_lists}, output_json, ensure_ascii=False, indent=4)
+		json.dump({'version': version, 'seed': time_seed, 'prize_lists': prize_lists}, output_json, ensure_ascii=False, indent=4)
