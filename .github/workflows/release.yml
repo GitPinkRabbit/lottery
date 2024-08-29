@@ -43,12 +43,6 @@ jobs:
     - name: Get commit id
       run: echo "release_id=$(git rev-parse --short $env:GITHUB_SHA)" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-    - name: Create a tag
-      uses: mathieudutour/github-tag-action@v6.2
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        custom_tag: release/${{ env.release_id }}
-
     - name: Fetch result
       uses: actions/download-artifact@v4
 
