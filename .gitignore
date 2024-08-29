@@ -1,2 +1,5 @@
 /*.exe
 /*.json
+/dist/
+/build/
+/*.spec
