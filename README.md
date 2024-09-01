@@ -6,4 +6,4 @@ In Windows CMD or PowerShell:
 $ .\lottery.exe <J/S/X> filename.csv
 ```
 
-in which, replace `<J/S/X>` into specific contest type.
+in which, replace `<J/S/X>` into the specific contest type.
