@@ -1,5 +1,5 @@
-# lottery.py. Version 20240830-v4
-version = '20240830-v4'
+# lottery.py. Version 20241019-v5
+version = '20241019-v5'
 
 import sys
 import csv
@@ -61,7 +61,7 @@ with open(filename, encoding=csv_file_encoding, newline='') as csv_file:
 		if not chosen:
 			choices.append((name, score, rank))
 			weights.append(score ** 2)
-	number_of_additional_prize = number_of_valid_participants // 50
+	number_of_additional_prize = number_of_valid_participants // 37
 	for _ in range(number_of_additional_prize):
 		chosen_participant = random.choices(choices, weights)[0]
 		prize_lists[-1].append(chosen_participant)
