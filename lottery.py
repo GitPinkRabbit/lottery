@@ -1,5 +1,5 @@
-# lottery.py. Version 20241019-v5
-version = '20241019-v5'
+# lottery.py. Version 20250629-v6-for-anniversary
+version = '20250629-v6-for-anniversary'
 
 import sys
 import csv
@@ -7,9 +7,10 @@ import random
 import getpass
 import time
 import json
+import math
 
 
-# Hydro OJ produces such CSV file
+# Luogu produces such CSV file
 csv_file_encoding = 'utf-8-sig'
 
 # Settings
@@ -17,7 +18,7 @@ contest_types = ['J', 'S', 'X']
 prize_count_by_type = {
 	'J': [0, 0, 0],
 	'S': [0, 1, 4],
-	'X': [1, 4, 9]
+	'X': [3, 8, 15]
 }
 prize_names = ['特等奖', '一等奖', '二等奖']
 additional_prize_name = '幸运奖'
@@ -46,10 +47,10 @@ with open(filename, encoding=csv_file_encoding, newline='') as csv_file:
 	prize_lists = [[] for _ in range(len(prize_names) + 1)]
 	choices = []
 	weights = []
-	for participant in participants:
-		rank = int(participant[0])
-		name = participant[1]
-		score = int(participant[6])
+	for index, participant in enumerate(participants):
+		rank = index + 1
+		name = participant[0]
+		score = int(participant[1])
 		if score > 0:
 			number_of_valid_participants += 1
 		chosen = False
@@ -61,7 +62,7 @@ with open(filename, encoding=csv_file_encoding, newline='') as csv_file:
 		if not chosen:
 			choices.append((name, score, rank))
 			weights.append(score ** 2)
-	number_of_additional_prize = number_of_valid_participants // 37
+	number_of_additional_prize = math.floor(math.pow(number_of_valid_participants, 1 / 3))
 	for _ in range(number_of_additional_prize):
 		chosen_participant = random.choices(choices, weights)[0]
 		prize_lists[-1].append(chosen_participant)
