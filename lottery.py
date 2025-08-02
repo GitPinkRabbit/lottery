@@ -1,5 +1,5 @@
-# lottery.py. Version 20250726-v7
-version = '20250726-v7'
+# lottery.py. Version 20250803-v8
+version = '20250803-v8'
 
 import sys
 import csv
@@ -17,19 +17,14 @@ csv_file_encoding_luogu = 'utf-8-sig'
 
 # Settings
 contest_types = ['J', 'S', 'X']
-parameters_by_type = {
-	# [Z, k]
-	'J': [0.1, 3],
-	'S': [1.0, 2],
-	'X': [1.0, 2]
-}
-
 contest_platforms = ['MX', 'LG']
-parameters_by_platform = {
-	# [Y]
-	'MX': [1.0],
-	'LG': [0.1]
-}
+parameters = {platform: {type: [] for type in contest_types} for platform in contest_platforms}
+parameters['MX']['X'] = [2, 3, 300]
+parameters['MX']['J'] = [3, 4, 100]
+parameters['LG']['X'] = [3, 4, 100]
+parameters['LG']['J'] = [4, 5, 30]
+# prizes for type S is not determined
+
 
 def get_name_score_rank_from_index_participant_platform(index, participant, platform):
 	rank = index + 1
@@ -72,16 +67,14 @@ with open(filename, encoding=csv_file_encoding, newline='') as csv_file:
 			weights.append(score ** 2)
 
 	X = number_of_valid_participants
-	Y = parameters_by_platform[contest_platform][0]
-	Z = parameters_by_type[contest_type][0]
-	k = parameters_by_type[contest_type][1]
-	W = math.floor(10 * X * Y * Z)
-	T = math.floor(math.pow(X, 1 / k))
+	r_rank, r_lucky, champion_prize = parameters[contest_platform][contest_type]
+	T_rank = math.floor(math.pow(X, 1 / r_rank))
+	T_lucky = math.floor(math.pow(X, 1 / r_lucky))
 
-	prize_list = choices[:T]
-	choices = choices[T:]
-	weights = weights[T:]
-	for _ in range(T):
+	prize_list = choices[:T_rank]
+	choices = choices[T_rank:]
+	weights = weights[T_rank:]
+	for _ in range(T_lucky):
 		chosen_participant = random.choices(choices, weights)[0]
 		prize_list.append(chosen_participant)
 		index = choices.index(chosen_participant)
@@ -94,12 +87,14 @@ with open(filename, encoding=csv_file_encoding, newline='') as csv_file:
 	print(f'\t随机种子为 {{{time_seed}}}，发在梦熊周赛选手 QQ 群（650703713）帮助我们记录！', end='\n\n')
 	print('', '名次', '分数', '奖金', '用户名', sep='\t', end='', flush=True)
 	for index, participant in enumerate(prize_list):
-		share = 2 * T if index == 0 else 1 if index >= T else T + 1 - index
-		denom = ((T + 7) * T - 2) / 2
-		prize = math.ceil(W * share / denom)
+		prize = 0
+		if index < T_rank:
+			prize = math.ceil(10 * math.pow(champion_prize / 10, 1 - index / T_rank))
+		else:
+			prize = 10
 		name, score, rank = participant
 		participant.append(prize)
-		if index < T:
+		if index < T_rank:
 			print()
 		else:
 			getpass.getpass('')
