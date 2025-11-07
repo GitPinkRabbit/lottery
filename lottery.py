@@ -1,5 +1,5 @@
-# lottery.py. Version 20250803-v8
-version = '20250803-v8'
+# lottery.py. Version 20251107-v9-mock
+version = '20251107-v9-mock'
 
 import sys
 import csv
@@ -21,8 +21,10 @@ contest_platforms = ['MX', 'LG']
 parameters = {platform: {type: [] for type in contest_types} for platform in contest_platforms}
 parameters['MX']['X'] = [2, 3, 300]
 parameters['MX']['J'] = [3, 4, 100]
-parameters['LG']['X'] = [3, 4, 100]
-parameters['LG']['J'] = [4, 5, 30]
+# parameters['LG']['X'] = [3, 4, 100]
+# parameters['LG']['J'] = [4, 5, 30]
+parameters['LG']['S'] = [2, 3, 300]
+parameters['LG']['J'] = [3, 4, 100]
 # prizes for type S is not determined
 
 
